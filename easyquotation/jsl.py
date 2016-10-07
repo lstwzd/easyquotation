@@ -1,4 +1,4 @@
-# coding:utf8
+# -*- coding:utf-8 -*-
 # 获取集思路的数据
 import json
 import time
@@ -146,15 +146,20 @@ class Jsl(object):
         data = self.formatfundajson(fundajson)
         # 过滤小于指定交易量的数据
         if min_volume:
-            data = {k: data[k] for k in data if float(data[k]['funda_volume']) > min_volume}
+            data = {k: data[k] for k in data if float(
+                data[k]['funda_volume']) > min_volume}
         if len(fields):
-            data = {k: data[k] for k in data if data[k]['coupon_descr_s'] in ''.join(fields)}
+            data = {k: data[k] for k in data if data[k]
+                    ['coupon_descr_s'] in ''.join(fields)}
         if ignore_nodown:
-            data = {k: data[k] for k in data if data[k]['fund_descr'].find('无下折') == -1}
+            data = {k: data[k] for k in data if data[
+                k]['fund_descr'].find('无下折') == -1}
         if forever:
-            data = {k: data[k] for k in data if data[k]['funda_left_year'].find('永续') != -1}
+            data = {k: data[k] for k in data if data[
+                k]['funda_left_year'].find('永续') != -1}
         if min_discount:
-            data = {k: data[k] for k in data if float(data[k]['funda_discount_rt'][:-1]) > min_discount}
+            data = {k: data[k] for k in data if float(
+                data[k]['funda_discount_rt'][:-1]) > min_discount}
 
         self.__funda = data
         return self.__funda
@@ -190,13 +195,17 @@ class Jsl(object):
         data = self.formatfundbjson(fundbjson)
         # 过滤小于指定交易量的数据
         if min_volume:
-            data = {k: data[k] for k in data if float(data[k]['fundb_volume']) > min_volume}
+            data = {k: data[k] for k in data if float(
+                data[k]['fundb_volume']) > min_volume}
         if len(fields):
-            data = {k: data[k] for k in data if data[k]['coupon_descr_s'] in ''.join(fields)}
+            data = {k: data[k] for k in data if data[k]
+                    ['coupon_descr_s'] in ''.join(fields)}
         if forever:
-            data = {k: data[k] for k in data if data[k]['fundb_left_year'].find('永续') != -1}
+            data = {k: data[k] for k in data if data[
+                k]['fundb_left_year'].find('永续') != -1}
         if min_discount:
-            data = {k: data[k] for k in data if float(data[k]['fundb_discount_rt'][:-1]) > min_discount}
+            data = {k: data[k] for k in data if float(
+                data[k]['fundb_discount_rt'][:-1]) > min_discount}
         self.__fundb = data
         return self.__fundb
 
@@ -255,7 +264,8 @@ class Jsl(object):
         :return: {"fund_id":{}}
         """
         # 添加当前的ctime
-        self.__etf_index_url = self.__etf_index_url.format(ctime=int(time.time()))
+        self.__etf_index_url = self.__etf_index_url.format(
+            ctime=int(time.time()))
         # 请求数据
         rep = requests.get(self.__etf_index_url)
         # 获取返回的json字符串, 转化为字典
@@ -267,10 +277,12 @@ class Jsl(object):
         # 过滤
         if index_id:
             # 指定跟踪的指数代码
-            data = {fund_id: cell for fund_id, cell in data.items() if cell["index_id"] == index_id}
+            data = {fund_id: cell for fund_id, cell in data.items() if cell[
+                "index_id"] == index_id}
         if min_volume:
             # 过滤小于指定交易量的数据
-            data = {fund_id: cell for fund_id, cell in data.items() if float(cell["volume"]) >= min_volume}
+            data = {fund_id: cell for fund_id, cell in data.items(
+            ) if float(cell["volume"]) >= min_volume}
         if min_discount is not None:
             # 指定最小溢价率
             if isinstance(min_discount, str):
@@ -312,7 +324,8 @@ class Jsl(object):
         }
         # 过滤小于指定交易量的数据
         if min_volume:
-            data = {k: data[k] for k in data if float(data[k]['volume']) > min_volume}
+            data = {k: data[k] for k in data if float(
+                data[k]['volume']) > min_volume}
 
         self.__qdii = data
         return self.__qdii
@@ -331,15 +344,16 @@ class Jsl(object):
         data = self.formatjisilujson(fundjson)
         # 过滤小于指定交易量的数据
         if min_volume:
-            data = {k: data[k] for k in data if float(data[k]['volume']) > min_volume}
+            data = {k: data[k] for k in data if float(
+                data[k]['volume']) > min_volume}
 
         self.__cb = data
         return self.__cb
 
 if __name__ == "__main__":
     Jsl().etfindex(
-            index_id="000016",
-            min_volume=0,
-            max_discount="-0.4",
-            min_discount="-1.3%"
+        index_id="000016",
+        min_volume=0,
+        max_discount="-0.4",
+        min_discount="-1.3%"
     )

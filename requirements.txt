@@ -1,4 +1,5 @@
 six
 requests
-aiohttp
+grequests
+#aiohttp
 easyutils
