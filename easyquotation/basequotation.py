@@ -1,7 +1,6 @@
 # -*- coding:utf-8 -*-
 import json
 import sys
-import time
 
 if sys.version_info[:2] > (3, 5):
     import asyncio
@@ -15,13 +14,6 @@ else:
 import easyutils
 
 from . import helpers
-
-
-class TimeOutError(Exception):
-
-    def __init__(self, result=None):
-        super(TimeOutError, self).__init__()
-        self.result = result
 
 
 class BaseQuotation:
@@ -68,7 +60,7 @@ class BaseQuotation:
             return response_text
     """
 
-    def get_stock_data(self, stock_list, time_out=10):
+    def get_stock_data(self, stock_list):
         if PY3:
             coroutines = []
             for params in stock_list:
@@ -95,13 +87,6 @@ class BaseQuotation:
             reqs = [grequests.get(self.stock_api + params)
                     for params in stock_list]
             res = [rep.text for rep in grequests.imap(reqs)]
-
-            ct_time = 0
-            while len(res) < len(stock_list):
-                time.sleep(1)
-                ct_time += 1
-                if ct_time > time_out:
-                    raise TimeOutError('请求证券信息超时')
 
         return self.format_response_data(res)
 
