@@ -10,6 +10,13 @@ else:
     PY3 = False
 
 
+class RequestLeveFunError(Exception):
+
+    def __init__(self, result=None):
+        super(TimeOutError, self).__init__()
+        self.result = result
+
+
 class Leverfun:
     stock_api = 'https://app.leverfun.com/timelyInfo/timelyOrderForm'
 
@@ -41,7 +48,7 @@ class Leverfun:
                     rep = grequests.map([req, ])[0]
                     r_json = rep.json()
                 except Exception as ex:
-                    pass
+                    raise RequestLeveFunError(ex.message)
                 else:
                     self.stocks_dict[
                         stock_code] = Leverfun.format_response_data(r_json)
